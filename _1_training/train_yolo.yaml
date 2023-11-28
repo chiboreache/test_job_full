@@ -1,0 +1,9 @@
+path: '/content/yolo_short'
+
+train: images/train
+test: images/test
+val: images/val
+
+names:
+  0: "0"
+  1: "1"

@@ -1,0 +1,9 @@
+matplotlib==3.8.2
+numpy==1.26.2
+onnxruntime==1.16.1
+Pillow==10.1.0
+PyYAML==6.0.1
+Shapely==2.0.2
+torch==2.1.1
+torchvision==0.16.1
+ultralytics==8.0.219
