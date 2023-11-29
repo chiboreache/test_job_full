@@ -123,11 +123,7 @@ def run(
         image = mpimg.imread(str(image_path))
         ax.imshow(image)
         frame_number = eval_cv.run(
-            box_left=d_left["xyxy_b"],
-            box_top=d_top["xyxy_b"],
-            trains=t,
-            ax=ax,
-            fig=fig,
+            box_left=d_left["xyxy_b"], box_top=d_top["xyxy_b"], trains=t, ax=ax
         )
         if frame_number:
             matrix_ids = f'{d_left["matrix_id"]}-{d_top["matrix_id"]}'
