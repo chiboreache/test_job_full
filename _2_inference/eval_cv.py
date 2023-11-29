@@ -85,7 +85,7 @@ def get_frame_number(pt, trains):
     return frame
 
 
-def run(box_left, box_top, trains, ax):
+def run(box_left, box_top, trains, ax, fig):
     bb_left = box(*box_left)
     bb_top = box(*box_top)
     viz = True
@@ -93,8 +93,8 @@ def run(box_left, box_top, trains, ax):
     hl2, vl2 = get_box_centroid_lines(bb_top, viz, ax)
     cp = lines_intersection(hl1, vl2)
     cross_pt = cp.x, cp.y
-    frame_number = get_frame_number(cross_pt, trains)
-    if viz:
+    frame_number = get_frame_number(cross_pt, trains, ax, fig)
+    if viz and frame_number:
         draw_match(frame_number, ax)
         plt.plot(*cp.xy, "mx", markersize=35)
         plt.plot(*cp.xy, "m.", markersize=30)
