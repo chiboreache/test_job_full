@@ -79,8 +79,8 @@ def is_in_xyxy(point_x, point_y, box_x, box_y, box_xx, box_yy):
 def get_frame_number(pt, trains):
     frame = None
     pad = 8
-    for i, box in enumerate(trains):
-        extended_box = [box[0] - pad, box[1] - pad, box[2] + pad, box[3] + pad]
+    for i, bbox in enumerate(trains):
+        extended_box = [bbox[0] - pad, bbox[1] - pad, bbox[2] + pad, bbox[3] + pad]
         q = is_in_xyxy(*pt, *extended_box)
         if q:
             frame = i + 1
@@ -88,6 +88,20 @@ def get_frame_number(pt, trains):
 
 
 def run(box_left, box_top, trains, ax):
+    for bbox in trains:
+        pad = 8
+        extended_box = [bbox[0] - pad, bbox[1] - pad, bbox[2] + pad, bbox[3] + pad]
+        x, y, xx, yy = extended_box
+        fr = plt.Rectangle(
+            (x, y),
+            xx - x,
+            yy - y,
+            linewidth=1,
+            facecolor="none",
+            edgecolor="orange",
+        )
+        ax.add_patch(fr)
+
     bb_left = box(*box_left)
     bb_top = box(*box_top)
     viz = True
@@ -95,11 +109,11 @@ def run(box_left, box_top, trains, ax):
     hl2, vl2 = get_box_centroid_lines(bb_top, viz, ax)
     cp = lines_intersection(hl1, vl2)
     cross_pt = cp.x, cp.y
-    frame_number = get_frame_number(cross_pt, trains)
+    frame_number= get_frame_number(cross_pt, trains)
     if viz and frame_number:
         draw_match(frame_number, ax)
-        plt.plot(*cp.xy, "mx", markersize=35)
-        plt.plot(*cp.xy, "m.", markersize=30)
+        plt.plot(*cp.xy, "mx", markersize=25)
+        plt.plot(*cp.xy, "m.", markersize=20)
         plt.axis("off")
     return frame_number
 
