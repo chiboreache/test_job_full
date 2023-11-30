@@ -78,8 +78,10 @@ def is_in_xyxy(point_x, point_y, box_x, box_y, box_xx, box_yy):
 
 def get_frame_number(pt, trains):
     frame = None
-    for i, train in enumerate(trains):
-        q = is_in_xyxy(*pt, *train)
+    pad = 8
+    for i, box in enumerate(trains):
+        extended_box = [box[0] - pad, box[1] - pad, box[2] + pad, box[3] + pad]
+        q = is_in_xyxy(*pt, *extended_box)
         if q:
             frame = i + 1
     return frame

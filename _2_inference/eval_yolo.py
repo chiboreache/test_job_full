@@ -6,7 +6,7 @@ def get_bb(results):
     res = results[0]
     bb = []
     bounding_boxes = res.boxes.xyxy.numpy().tolist()
-    pad = 6
+    pad = 3
     extended_boxes = []
     for box in bounding_boxes:
         extended_box = [box[0] - pad, box[1] - pad, box[2] + pad, box[3] + pad]
