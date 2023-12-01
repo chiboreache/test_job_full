@@ -19,3 +19,5 @@ The first week was spent almost entirely on searching for an algorithmic approac
 ## Google Colab
 
 https://colab.research.google.com/github/chiboreache/test_job_colab/blob/main/main.ipynb
+
+> для распознования положить изображения и файл анноации в папку `"./TEST"` предварительно очистить

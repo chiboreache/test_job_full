@@ -113,30 +113,36 @@ def run(
         valid_frame = get_valid_frame(json_path)
         image_path = src / f"{json_path.stem}.jpg"
         img = Image.open(str(image_path))
-        l, r, t = eval_yolo.run(
-            model_path="MODELS/best.pt",
-            image_path=str(image_path),
-        )
-        d_left = get_nearest(img, pairs=l)
-        d_top = get_nearest(img, pairs=r)
-        fig, ax = plt.subplots(figsize=(20, 10))
-        image = mpimg.imread(str(image_path))
-        ax.imshow(image)
-        frame_number = eval_cv.run(
-            box_left=d_left["xyxy_b"], box_top=d_top["xyxy_b"], trains=t, ax=ax
-        )
-        if frame_number:
-            matrix_ids = f'{d_left["matrix_id"]}-{d_top["matrix_id"]}'
-            answer = valid_frame == frame_number
-            print(f"\nmatrix_ids: {matrix_ids}")
-            print(f"frame_number: {frame_number}\n")
-            d = dst / str(answer)
+        try:
+            l, r, t = eval_yolo.run(
+                model_path="MODELS/best.pt",
+                image_path=str(image_path),
+            )
+            d_left = get_nearest(img, pairs=l)
+            d_top = get_nearest(img, pairs=r)
+            fig, ax = plt.subplots(figsize=(20, 10))
+            image = mpimg.imread(str(image_path))
+            ax.imshow(image)
+            frame_number = eval_cv.run(
+                box_left=d_left["xyxy_b"], box_top=d_top["xyxy_b"], trains=t, ax=ax
+            )
+            if frame_number:
+                matrix_ids = f'{d_left["matrix_id"]}-{d_top["matrix_id"]}'
+                answer = valid_frame == frame_number
+                print(f"\nmatrix_ids: {matrix_ids}")
+                print(f"frame_number: {frame_number}\n")
+                d = dst / str(answer)
+                d.mkdir(parents=True, exist_ok=True)
+                fig.savefig(f"{d}/{image_path.stem}_{matrix_ids}_{frame_number}.jpg")
+            else:
+                d = dst / "False_CV"
+                d.mkdir(parents=True, exist_ok=True)
+                fig.savefig(f"{d}/{image_path.stem}_failed.jpg")
+        except Exception:
+            d = dst / "False_YOLO"
             d.mkdir(parents=True, exist_ok=True)
-            fig.savefig(f"{d}/{image_path.stem}_{matrix_ids}_{frame_number}.jpg")
-        else:
-            d = dst / "False_CV"
-            d.mkdir(parents=True, exist_ok=True)
-            fig.savefig(f"{d}/{image_path.stem}_failed.jpg")
+            img.save(f"{d}/{image_path.stem}_failed.jpg")
+
     t = dst / "True"
     q = len(list(t.glob("*.jpg")))
     total = len(jsons)
